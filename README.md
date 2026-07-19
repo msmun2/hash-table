@@ -1,164 +1,127 @@
-Implementasi Hash Table dengan Separate Chaining Menggunakan Java
-Deskripsi Program
+# Implementasi Hash Table dengan Separate Chaining
 
-Program ini merupakan implementasi sederhana struktur data Hash Table menggunakan bahasa pemrograman Java.
+Program ini merupakan implementasi sederhana struktur data **Hash Table** menggunakan bahasa pemrograman Java.
 
-Hash Table digunakan untuk menyimpan data dalam bentuk pasangan:
+Hash Table dibuat menggunakan array berukuran `10` dan menggunakan metode **Separate Chaining** untuk menangani tabrakan atau *collision*.
 
-key dan value
+Program tidak menggunakan struktur data bawaan Java seperti:
 
-Contoh:
+* `HashMap`
+* `Hashtable`
+* `LinkedList`
 
-1, Apel
-11, Jeruk
-21, Mangga
+Linked List dibuat secara manual menggunakan class `Node`.
 
-Program ini tidak menggunakan struktur data bawaan Java seperti:
+---
 
-HashMap
-LinkedList
+## Struktur Program
 
-Linked List dibuat secara manual menggunakan kelas Node.
+Program terdiri dari tiga bagian utama:
 
-Metode yang digunakan untuk mengatasi tabrakan adalah Separate Chaining.
+```text
+Main
+├── Node
+├── HashTable
+└── main()
+```
 
-Apa Itu Hash Table?
+Keterangan:
 
-Hash Table adalah struktur data yang digunakan untuk menyimpan dan mencari data dengan cepat berdasarkan sebuah kunci atau key.
+| Bagian      | Fungsi                                               |
+| ----------- | ---------------------------------------------------- |
+| `Node`      | Menyimpan `key`, `value`, dan alamat Node berikutnya |
+| `HashTable` | Menjalankan operasi Hash Table                       |
+| `main()`    | Menjalankan pengujian program                        |
 
-Setiap key akan dihitung menggunakan fungsi hash untuk menentukan indeks tempat data disimpan.
+---
 
-Pada program ini, ukuran Hash Table adalah:
+# Penjelasan Kode Program
 
-10
+## 1. Class `Node`
 
-Indeks yang tersedia adalah:
-
-0 sampai 9
-Fungsi Hash
-
-Fungsi hash yang digunakan adalah metode modulo.
-
-int hash(int key) {
-    return key % 10;
-}
-
-Rumusnya adalah:
-
-index = key mod 10
-
-Contoh:
-
-1 mod 10  = 1
-11 mod 10 = 1
-21 mod 10 = 1
-
-Key 1, 11, dan 21 menghasilkan indeks yang sama, yaitu indeks 1.
-
-Kondisi tersebut disebut sebagai collision atau tabrakan.
-
-Separate Chaining
-
-Separate Chaining adalah metode untuk menangani tabrakan pada Hash Table dengan menggunakan Linked List.
-
-Jika beberapa key menghasilkan indeks yang sama, data akan disimpan secara berurutan pada Linked List di indeks tersebut.
-
-Contoh:
-
-Indeks 1 : [1, Apel] -> [11, Jeruk] -> [21, Mangga] -> null
-
-Semua data tersebut berada pada indeks 1, tetapi disimpan dalam Node yang berbeda.
-
-Penjelasan Kode
-1. Class Main
-public class Main {
-
-Class Main merupakan class utama dari program.
-
-Nama file Java harus sama dengan nama class utama, sehingga kode program disimpan dengan nama:
-
-Main.java
-2. Class Node
+```java
 static class Node {
     int key;
     String value;
     Node next;
+
+    Node(int key, String value) {
+        this.key = key;
+        this.value = value;
+        this.next = null;
+    }
 }
+```
 
-Class Node digunakan untuk membuat Linked List secara manual.
+Class `Node` digunakan untuk membuat Linked List secara manual.
 
-Setiap Node memiliki tiga variabel.
+Setiap Node memiliki tiga variabel:
 
-Key
-int key;
+| Variabel | Tipe Data | Fungsi                      |
+| -------- | --------- | --------------------------- |
+| `key`    | `int`     | Menyimpan kunci data        |
+| `value`  | `String`  | Menyimpan nilai dari key    |
+| `next`   | `Node`    | Menunjuk ke Node berikutnya |
 
-Variabel key digunakan sebagai kunci data.
+Contoh sebuah Node:
 
-Contoh:
+```text
+key   = 1
+value = Apel
+next  = null
+```
 
-1
-11
-21
-Value
-String value;
+Variabel `next` bernilai `null` apabila tidak terdapat Node berikutnya.
 
-Variabel value digunakan untuk menyimpan nilai dari key.
+---
 
-Contoh:
+## 2. Constructor `Node`
 
-Apel
-Jeruk
-Mangga
-Next
-Node next;
-
-Variabel next digunakan untuk menunjuk ke Node berikutnya.
-
-Jika tidak ada Node berikutnya, nilai next adalah:
-
-null
-3. Constructor Node
+```java
 Node(int key, String value) {
     this.key = key;
     this.value = value;
     this.next = null;
 }
+```
 
 Constructor digunakan untuk memberikan nilai awal ketika sebuah Node dibuat.
 
 Contoh:
 
+```java
 Node baru = new Node(1, "Apel");
+```
 
-Node tersebut memiliki isi:
+Node tersebut akan menyimpan:
 
-key   = 1
-value = Apel
-next  = null
-4. Class HashTable
-static class HashTable {
+```text
+Key   : 1
+Value : Apel
+Next  : null
+```
 
-Class HashTable digunakan untuk mengatur seluruh proses penyimpanan data.
+---
 
-Class ini memiliki beberapa operasi, yaitu:
+## 3. Array Hash Table
 
-insert()
-search()
-remove()
-display()
-5. Array Hash Table
+```java
 Node[] table = new Node[10];
+```
 
-Kode tersebut membuat sebuah array bernama table dengan ukuran 10.
+Kode tersebut membuat array Hash Table dengan ukuran `10`.
 
-Setiap elemen array memiliki tipe data Node.
+Indeks Hash Table dimulai dari:
 
-Indeks array dimulai dari:
-
+```text
 0 sampai 9
+```
 
-Pada awal program, seluruh indeks masih bernilai null.
+Setiap indeks menyimpan Node pertama dari sebuah Linked List.
 
+Kondisi awal Hash Table:
+
+```text
 Indeks 0 : null
 Indeks 1 : null
 Indeks 2 : null
@@ -169,338 +132,317 @@ Indeks 6 : null
 Indeks 7 : null
 Indeks 8 : null
 Indeks 9 : null
-6. Method Hash
+```
+
+---
+
+## 4. Method `hash()`
+
+```java
 int hash(int key) {
     return key % 10;
 }
+```
 
-Method hash() digunakan untuk menentukan indeks berdasarkan key.
+Method `hash()` digunakan untuk menentukan indeks berdasarkan key.
+
+Fungsi hash menggunakan operasi modulo:
+
+```text
+index = key mod 10
+```
 
 Contoh:
 
-hash(11);
+| Key | Perhitungan | Indeks |
+| --: | ----------- | -----: |
+|   1 | `1 mod 10`  |      1 |
+|  11 | `11 mod 10` |      1 |
+|  21 | `21 mod 10` |      1 |
+|   2 | `2 mod 10`  |      2 |
 
-Perhitungannya adalah:
+Key `1`, `11`, dan `21` menghasilkan indeks yang sama, yaitu indeks `1`.
 
-11 mod 10 = 1
+Kondisi tersebut disebut **collision**.
 
-Artinya, key 11 akan disimpan pada indeks 1.
+---
 
-7. Method Insert
+## 5. Method `insert()`
+
+```java
 void insert(int key, String value) {
+    int index = hash(key);
+    Node baru = new Node(key, value);
 
-Method insert() digunakan untuk memasukkan key dan value ke dalam Hash Table.
+    if (table[index] == null) {
+        table[index] = baru;
+    } else {
+        Node bantu = table[index];
 
-Contoh:
+        while (bantu.next != null) {
+            bantu = bantu.next;
+        }
 
-data.insert(1, "Apel");
-Menentukan Indeks
+        bantu.next = baru;
+    }
+}
+```
+
+Method `insert()` digunakan untuk memasukkan pasangan `key` dan `value` ke dalam Hash Table.
+
+### Menentukan indeks
+
+```java
 int index = hash(key);
+```
 
-Key dihitung menggunakan fungsi hash.
+Program memanggil method `hash()` untuk menentukan indeks penyimpanan.
 
-Untuk key 1:
+### Membuat Node baru
 
-1 mod 10 = 1
-
-Data akan dimasukkan ke indeks 1.
-
-Membuat Node Baru
+```java
 Node baru = new Node(key, value);
+```
 
-Kode tersebut membuat Node baru berdasarkan key dan value yang diberikan.
+Program membuat Node yang berisi key dan value yang akan dimasukkan.
 
-Memeriksa Indeks
+### Memasukkan data ke indeks kosong
+
+```java
 if (table[index] == null) {
     table[index] = baru;
 }
+```
 
 Jika indeks masih kosong, Node baru langsung dimasukkan ke indeks tersebut.
 
-Contoh:
+### Menangani collision
 
-Indeks 1 : [1, Apel] -> null
-Jika Terjadi Tabrakan
+```java
 else {
     Node bantu = table[index];
 
-Jika indeks sudah memiliki data, variabel bantu digunakan untuk menelusuri Linked List.
+    while (bantu.next != null) {
+        bantu = bantu.next;
+    }
 
-while (bantu.next != null) {
-    bantu = bantu.next;
+    bantu.next = baru;
 }
+```
 
-Perulangan berjalan sampai menemukan Node terakhir.
+Jika indeks sudah berisi data, program menelusuri Linked List sampai Node terakhir.
 
-bantu.next = baru;
-
-Node baru kemudian ditambahkan setelah Node terakhir.
-
-Contoh setelah memasukkan key 1, 11, dan 21:
-
-Indeks 1 : [1, Apel] -> [11, Jeruk] -> [21, Mangga] -> null
-8. Method Search
-String search(int key) {
-
-Method search() digunakan untuk mencari value berdasarkan key.
+Node baru kemudian ditambahkan pada bagian akhir Linked List.
 
 Contoh:
 
-data.search(11);
-Menentukan Indeks
+```text
+Indeks 1 : [1, Apel] -> [11, Jeruk] -> [21, Mangga] -> null
+```
+
+---
+
+## 6. Method `search()`
+
+```java
+String search(int key) {
+    int index = hash(key);
+    Node bantu = table[index];
+
+    while (bantu != null) {
+        if (bantu.key == key) {
+            return bantu.value;
+        }
+
+        bantu = bantu.next;
+    }
+
+    return "Tidak ditemukan";
+}
+```
+
+Method `search()` digunakan untuk mencari value berdasarkan key.
+
+Program terlebih dahulu menentukan indeks:
+
+```java
 int index = hash(key);
+```
 
-Untuk key 11:
+Kemudian program memeriksa setiap Node pada Linked List:
 
-11 mod 10 = 1
+```java
+while (bantu != null)
+```
 
-Pencarian dilakukan pada Linked List di indeks 1.
+Jika key ditemukan:
 
-Menelusuri Linked List
-Node bantu = table[index];
-
-while (bantu != null) {
-
-Variabel bantu digunakan untuk memeriksa setiap Node.
-
-Memeriksa Key
+```java
 if (bantu.key == key) {
     return bantu.value;
 }
+```
 
-Jika key ditemukan, program mengembalikan value dari key tersebut.
+Program mengembalikan value dari key tersebut.
 
-Contoh:
+Jika key tidak ditemukan, program mengembalikan:
 
-Key 11 ditemukan
-Value = Jeruk
-Berpindah ke Node Berikutnya
-bantu = bantu.next;
-
-Jika key belum ditemukan, pencarian dilanjutkan ke Node berikutnya.
-
-Data Tidak Ditemukan
-return "Tidak ditemukan";
-
-Jika seluruh Node telah diperiksa dan key tidak ditemukan, program mengembalikan pesan:
-
+```text
 Tidak ditemukan
-9. Method Remove
+```
+
+---
+
+## 7. Method `remove()`
+
+```java
 void remove(int key) {
+    int index = hash(key);
 
-Method remove() digunakan untuk menghapus data berdasarkan key.
+    Node bantu = table[index];
+    Node sebelumnya = null;
 
-Menentukan Indeks
-int index = hash(key);
+    while (bantu != null) {
+        if (bantu.key == key) {
+            if (sebelumnya == null) {
+                table[index] = bantu.next;
+            } else {
+                sebelumnya.next = bantu.next;
+            }
 
-Program menghitung indeks dari key yang akan dihapus.
+            System.out.println(
+                "Data dengan key " + key + " berhasil dihapus"
+            );
 
-Variabel Bantu
+            return;
+        }
+
+        sebelumnya = bantu;
+        bantu = bantu.next;
+    }
+
+    System.out.println(
+        "Data dengan key " + key + " tidak ditemukan"
+    );
+}
+```
+
+Method `remove()` digunakan untuk menghapus data berdasarkan key.
+
+Program menggunakan dua variabel:
+
+```java
 Node bantu = table[index];
 Node sebelumnya = null;
+```
 
-Variabel bantu digunakan untuk memeriksa Node saat ini.
+* `bantu` digunakan untuk menunjuk Node yang sedang diperiksa.
+* `sebelumnya` digunakan untuk menyimpan Node sebelum Node yang sedang diperiksa.
 
-Variabel sebelumnya digunakan untuk menyimpan Node sebelum Node saat ini.
+### Menghapus Node pertama
 
-Mencari Key
-while (bantu != null) {
-
-Program menelusuri Linked List sampai key ditemukan atau sampai akhir Linked List.
-
-Menghapus Node Pertama
+```java
 if (sebelumnya == null) {
     table[index] = bantu.next;
 }
+```
 
-Jika sebelumnya masih null, berarti data yang dihapus berada pada Node pertama.
+Jika `sebelumnya` masih bernilai `null`, berarti data yang dihapus berada pada Node pertama.
 
-Contoh sebelum dihapus:
+### Menghapus Node tengah atau terakhir
 
-[1, Apel] -> [11, Jeruk] -> null
-
-Setelah key 1 dihapus:
-
-[11, Jeruk] -> null
-Menghapus Node Tengah atau Terakhir
+```java
 else {
     sebelumnya.next = bantu.next;
 }
+```
 
-Jika data berada di tengah atau akhir Linked List, Node sebelumnya akan langsung dihubungkan dengan Node setelah data yang dihapus.
+Node sebelumnya akan diarahkan ke Node setelah Node yang dihapus.
 
-Contoh sebelum key 11 dihapus:
+---
 
-[1, Apel] -> [11, Jeruk] -> [21, Mangga] -> null
+## 8. Method `display()`
 
-Setelah key 11 dihapus:
-
-[1, Apel] -> [21, Mangga] -> null
-Pesan Berhasil
-System.out.println("Data berhasil dihapus");
-return;
-
-Jika data berhasil dihapus, program menampilkan pesan dan menghentikan method.
-
-Data Tidak Ditemukan
-System.out.println("Data tidak ditemukan");
-
-Pesan tersebut ditampilkan apabila key yang akan dihapus tidak ada di dalam Hash Table.
-
-10. Method Display
+```java
 void display() {
+    for (int i = 0; i < 10; i++) {
+        System.out.print("Indeks " + i + " : ");
 
-Method display() digunakan untuk menampilkan seluruh isi Hash Table.
+        Node bantu = table[i];
 
-Perulangan Setiap Indeks
-for (int i = 0; i < 10; i++) {
+        while (bantu != null) {
+            System.out.print(
+                "[" + bantu.key + ", " + bantu.value + "] -> "
+            );
 
-Perulangan dilakukan dari indeks 0 sampai 9.
+            bantu = bantu.next;
+        }
 
-Menampilkan Nomor Indeks
-System.out.print("Indeks " + i + " : ");
-
-Kode tersebut menampilkan nomor indeks.
-
-Mengambil Node Pertama
-Node bantu = table[i];
-
-Variabel bantu menunjuk ke Node pertama pada setiap indeks.
-
-Menampilkan Isi Linked List
-while (bantu != null) {
-    System.out.print(
-        "[" + bantu.key + ", " + bantu.value + "] -> "
-    );
-
-    bantu = bantu.next;
+        System.out.println("null");
+    }
 }
+```
 
-Program menampilkan key dan value dari setiap Node, kemudian berpindah ke Node berikutnya.
+Method `display()` digunakan untuk menampilkan seluruh isi Hash Table.
 
-Menampilkan Null
-System.out.println("null");
+Perulangan berikut digunakan untuk mengakses indeks `0` sampai `9`:
 
-null menunjukkan bahwa Linked List sudah berakhir atau indeks tidak memiliki data.
+```java
+for (int i = 0; i < 10; i++)
+```
 
-Penjelasan Method Main
-Membuat Objek Hash Table
-HashTable data = new HashTable();
+Setiap Linked List ditelusuri menggunakan:
 
-Kode tersebut membuat objek Hash Table bernama data.
+```java
+while (bantu != null)
+```
 
-Memasukkan Data
+Format data yang ditampilkan adalah:
+
+```text
+[key, value] -> [key, value] -> null
+```
+
+---
+
+# Pengujian Program
+
+## Test Case 1: Insert Tanpa Collision
+
+Test case pertama digunakan untuk menguji proses memasukkan data yang menghasilkan indeks berbeda.
+
+### Kode pengujian
+
+```java
+System.out.println("=================================");
+System.out.println("TEST CASE 1: INSERT TANPA COLLISION");
+System.out.println("=================================");
+
 data.insert(1, "Apel");
-data.insert(11, "Jeruk");
-data.insert(21, "Mangga");
 data.insert(2, "Pisang");
-data.insert(12, "Anggur");
+data.insert(3, "Melon");
 
-Hasil perhitungan fungsi hash:
-
-Key	Perhitungan	Indeks
-1	1 mod 10	1
-11	11 mod 10	1
-21	21 mod 10	1
-2	2 mod 10	2
-12	12 mod 10	2
-
-Data pada indeks 1:
-
-[1, Apel] -> [11, Jeruk] -> [21, Mangga] -> null
-
-Data pada indeks 2:
-
-[2, Pisang] -> [12, Anggur] -> null
-Menampilkan Hash Table
 data.display();
+```
 
-Kode tersebut memanggil method display() untuk menampilkan seluruh data.
+### Data yang dimasukkan
 
-Mencari Data
-System.out.println(data.search(11));
+| Key | Value  |
+| --: | ------ |
+|   1 | Apel   |
+|   2 | Pisang |
+|   3 | Melon  |
 
-Program mencari key 11.
+### Perhitungan indeks
 
-Key 11 berada pada indeks:
+| Key | Perhitungan | Indeks |
+| --: | ----------- | -----: |
+|   1 | `1 mod 10`  |      1 |
+|   2 | `2 mod 10`  |      2 |
+|   3 | `3 mod 10`  |      3 |
 
-11 mod 10 = 1
+Ketiga key menghasilkan indeks yang berbeda sehingga tidak terjadi collision.
 
-Value yang ditemukan adalah:
+### Hasil yang diharapkan
 
-Jeruk
-Menghapus Data
-data.remove(21);
-
-Program menghapus data dengan key 21.
-
-Sebelum dihapus:
-
-[1, Apel] -> [11, Jeruk] -> [21, Mangga] -> null
-
-Setelah dihapus:
-
-[1, Apel] -> [11, Jeruk] -> null
-Contoh Output Program
-Isi Hash Table:
-Indeks 0 : null
-Indeks 1 : [1, Apel] -> [11, Jeruk] -> [21, Mangga] -> null
-Indeks 2 : [2, Pisang] -> [12, Anggur] -> null
-Indeks 3 : null
-Indeks 4 : null
-Indeks 5 : null
-Indeks 6 : null
-Indeks 7 : null
-Indeks 8 : null
-Indeks 9 : null
-
-Pencarian key 11:
-Jeruk
-
-Menghapus key 21:
-Data berhasil dihapus
-
-Isi setelah dihapus:
-Indeks 0 : null
-Indeks 1 : [1, Apel] -> [11, Jeruk] -> null
-Indeks 2 : [2, Pisang] -> [12, Anggur] -> null
-Indeks 3 : null
-Indeks 4 : null
-Indeks 5 : null
-Indeks 6 : null
-Indeks 7 : null
-Indeks 8 : null
-Indeks 9 : null
-Cara Menjalankan Program
-1. Simpan File
-
-Simpan kode program dengan nama:
-
-Main.java
-2. Buka Terminal
-
-Masuk ke folder tempat file Main.java disimpan.
-
-3. Compile Program
-
-Jalankan perintah:
-
-javac Main.java
-
-Jika tidak terdapat error, Java akan membuat file:
-
-Main.class
-4. Jalankan Program
-
-Gunakan perintah:
-
-java Main
-
-Output Hash Table akan ditampilkan pada terminal.
-
-Operasi yang Tersedia
-Method	Fungsi
-insert(key, value)	Memasukkan key dan value
-search(key)	Mencari value berdasarkan key
-remove(key)	Menghapus data berdasarkan key
-display()	Menampilkan seluruh isi Hash Table
+```text
