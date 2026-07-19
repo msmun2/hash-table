@@ -443,6 +443,4 @@ data.display();
 
 Ketiga key menghasilkan indeks yang berbeda sehingga tidak terjadi collision.
 
-### Hasil yang diharapkan
-
 ```text
